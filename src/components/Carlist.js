@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { AgGridReact } from "ag-grid-react";
+import { IconButton } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import Snackbar from "@mui/material/Snackbar";
 
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-material.css";
-import { IconButton } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
 
 function Carlist() {
   const [cars, setCars] = useState([]);
+  const [open, setOpen] = useState(false);
 
   // Fetch cars affter the first render
   useEffect(() => {
@@ -28,6 +30,7 @@ function Carlist() {
           if (!response.ok) {
             alert("Something went wrong while deleting");
           } else {
+            setOpen(true);
             fetchCars();
           }
         })
@@ -64,6 +67,12 @@ function Carlist() {
           paginationPageSize={10}
         />
       </div>
+      <Snackbar
+        open={open}
+        autoHideDuration={3000}
+        onClose={() => setOpen(false)}
+        message="Car was deleted successfully"
+      />
     </>
   );
 }
