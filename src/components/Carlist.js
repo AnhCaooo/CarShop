@@ -3,6 +3,7 @@ import { AgGridReact } from "ag-grid-react";
 import { IconButton } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Snackbar from "@mui/material/Snackbar";
+import Addcar from "./Addcar";
 
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-material.css";
@@ -38,6 +39,22 @@ function Carlist() {
     }
   };
 
+  const addCar = (newCar) => {
+    fetch("https://carstockrest.herokuapp.com/cars", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newCar),
+    })
+      .then((response) => {
+        if (response.ok) {
+          fetchCars();
+        } else {
+          alert("Something went wrong when adding new car!");
+        }
+      })
+      .catch((err) => console.error(err));
+  };
+
   const [columns] = useState([
     { field: "brand", sortable: true, filter: true },
     { field: "model", sortable: true, filter: true },
@@ -59,6 +76,7 @@ function Carlist() {
 
   return (
     <>
+      <Addcar addCar={addCar} />
       <div className="ag-theme-material" style={{ height: 600, width: "90%" }}>
         <AgGridReact
           columnDefs={columns}
